@@ -1,11 +1,12 @@
 #include <SPI.h>
 #include <LoRa.h>
 
-#define CS_PIN 5 // 17
-
-#define SCK_PIN 2 // 18
-#define MISO_PIN 4 // 16
-#define MOSI_PIN 3 // 19
+#define CS_PIN 5 // Connects to NSS
+#define SCK_PIN 2 // Connects to SCK
+#define MISO_PIN 4 // 
+#define MOSI_PIN 3 // 
+#define reset_PIN 10 // Connects to RST
+#define INT_PIN 11 // Connects to DIO0
 
 String outgoing;              // outgoing message
 byte msgCount = 0;            // count of outgoing messages
@@ -21,7 +22,7 @@ void Lora_setup() {
   delay(5000);
 
   LoRa.setSPI(SPI);
-  LoRa.setPins(CS_PIN, 10, 11);
+  LoRa.setPins(CS_PIN, reset_PIN, INT_PIN);
 
   Serial.print("Starting LORA");
 

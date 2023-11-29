@@ -98,6 +98,5 @@ void onReceive(int packetSize) {
   if(incoming =="PING"){
     sendMessage("PONG");
     
-    
   };
 }
