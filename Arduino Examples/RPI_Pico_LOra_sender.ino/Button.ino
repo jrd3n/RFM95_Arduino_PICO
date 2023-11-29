@@ -4,7 +4,7 @@ ButtonDebounce button(18, 50);
 
 void buttonChanged(int state){
   digitalWrite(25,!state);
-  Serial.println("Changed: " + String(state));
+//  Serial.println("Changed: " + String(state));
 //  PRINT_SCREEN("button\t");
 //  PRINT_SCREEN(String(state));
 //  PRINT_SCREEN("\n");
@@ -14,6 +14,7 @@ void buttonChanged(int state){
     PRINT_SCREEN("\fPING\n");
     sendMessage("PING");
     now = millis();
+    
     }
 }
 

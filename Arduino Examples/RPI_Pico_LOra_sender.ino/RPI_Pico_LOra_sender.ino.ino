@@ -10,6 +10,8 @@ void setup() {
 
   button_setup();
 
+  PRINT_SCREEN("Online\n");
+
 }
 
 void loop(){
@@ -17,7 +19,7 @@ void loop(){
   button_loop();
   
 //  sendMessage("message");
-//  PRINT_SCREEN("message\n");
+
 
 
 

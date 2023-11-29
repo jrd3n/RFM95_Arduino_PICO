@@ -19,7 +19,7 @@ void Lora_setup() {
   SPI.setTX(MOSI_PIN);
   SPI.begin(true);
 
-  delay(5000);
+  delay(200);
 
   LoRa.setSPI(SPI);
   LoRa.setPins(CS_PIN, reset_PIN, INT_PIN);
@@ -30,6 +30,12 @@ void Lora_setup() {
     Serial.print(".");
     delay(200);
   }
+
+  LoRa.setSpreadingFactor(12); // between 6 and 12
+//  LoRa.setSignalBandwidth(7.8E3); // Supported values are 7.8E3, 10.4E3, 15.6E3, 20.8E3, 31.25E3, 41.7E3, 62.5E3, 125E3, 250E3, and 500E3
+  LoRa.enableCrc();
+//  LoRa.setTxPower(14, PA_OUTPUT_RFO_PIN); // Supported values are 2 to 20 for PA_OUTPUT_PA_BOOST_PIN, and 0 to 14 for PA_OUTPUT_RFO_PIN
+  LoRa.setTxPower(20); // Supported values are 2 to 20 for PA_OUTPUT_PA_BOOST_PIN, and 0 to 14 for PA_OUTPUT_RFO_PIN
 
   Serial.println("\tStarted!");
 
@@ -88,11 +94,20 @@ void onReceive(int packetSize) {
   Serial.println("Message ID: " + String(incomingMsgId));
   Serial.println("Message length: " + String(incomingLength));
   Serial.println("Message: " + incoming);
+  
   PRINT_SCREEN(incoming);
   PRINT_SCREEN("\n");
+  
   PRINT_SCREEN("RSSI: ");
   PRINT_SCREEN(String(LoRa.packetRssi()));
+  PRINT_SCREEN("dB\n");
+
+  PRINT_SCREEN("SNR: ");
+  PRINT_SCREEN(String(LoRa.packetSnr()));
   PRINT_SCREEN("\n");
+
+  PRINT_SCREEN("FREQ ERR: "+ String(LoRa.packetFrequencyError())+" htz\n");
+  
   Serial.println("RSSI: " + String(LoRa.packetRssi()));
   Serial.println("Snr: " + String(LoRa.packetSnr()));
   Serial.println();

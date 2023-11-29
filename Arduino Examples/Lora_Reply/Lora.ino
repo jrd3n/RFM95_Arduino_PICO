@@ -8,6 +8,7 @@
 #define reset_PIN 10 // Connects to RST
 #define INT_PIN 11 // Connects to DIO0
 
+
 String outgoing;              // outgoing message
 byte msgCount = 0;            // count of outgoing messages
 
@@ -19,7 +20,7 @@ void Lora_setup() {
   SPI.setTX(MOSI_PIN);
   SPI.begin(true);
 
-  delay(5000);
+  delay(200);
 
   LoRa.setSPI(SPI);
   LoRa.setPins(CS_PIN, reset_PIN, INT_PIN);
@@ -31,6 +32,13 @@ void Lora_setup() {
     delay(200);
   }
 
+  LoRa.setSpreadingFactor(12); // between 6 and 12
+//  LoRa.setSignalBandwidth(7.8E3); // Supported values are 7.8E3, 10.4E3, 15.6E3, 20.8E3, 31.25E3, 41.7E3, 62.5E3, 125E3, 250E3, and 500E3
+  LoRa.enableCrc();
+//  LoRa.setTxPower(14, PA_OUTPUT_RFO_PIN); // Supported values are 2 to 20 for PA_OUTPUT_PA_BOOST_PIN, and 0 to 14 for PA_OUTPUT_RFO_PIN
+
+  LoRa.setTxPower(20); 
+
   Serial.println("\tStarted!");
 
   LoRa.onReceive(onReceive);
@@ -39,6 +47,8 @@ void Lora_setup() {
 }
 
 void sendMessage(String outgoing) {
+
+  digitalWrite(LED_PIN,HIGH);
 
   Serial.print("Sending message: ");
   Serial.println(outgoing);
@@ -52,12 +62,16 @@ void sendMessage(String outgoing) {
   LoRa.endPacket();                     // finish packet and send it
   msgCount++;                           // increment message ID
   LoRa.receive();       
+
+  digitalWrite(LED_PIN,LOW);
 }
 
 void onReceive(int packetSize) {
+
+  
   if (packetSize == 0) return;          // if there's no packet, return
 
-  digitalWrite(25,HIGH);
+  digitalWrite(LED_PIN,HIGH);
 
   // read packet header bytes:
 //  int recipient = LoRa.read();          // recipient address
@@ -93,7 +107,7 @@ void onReceive(int packetSize) {
   Serial.println("Snr: " + String(LoRa.packetSnr()));
   Serial.println();
 
-  digitalWrite(25,LOW);
+  digitalWrite(LED_PIN,LOW);
 
   if(incoming =="PING"){
     sendMessage("PONG");
